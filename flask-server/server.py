@@ -8,9 +8,6 @@ app = Flask(__name__)
 
 CORS(app, origins=["http://localhost:3000"])
 
-@app.route('/members')
-def members():
-    return jsonify({"members": ["yas", "yaas", "yaaas"]})
 
 # States
 NOT_STARTED = 0
@@ -32,8 +29,7 @@ glassesValues = None
 
 @app.route('/control', methods=['POST'])
 def control():
-    global state, end_time, remaining_time_when_paused
-    global frontend
+    global state, end_time, remaining_time_when_paused, frontend
 
     action = request.json.get("action")
     current_time = time.time()
@@ -65,13 +61,12 @@ def time_left():
         print(frontend.getValues())
         glassesValues = frontend.getValues()
 
-
     if state == NOT_STARTED:
         return jsonify({"time_left": 0, "state": state})
     
     # Handle the paused states
     if state in [WORK_PAUSED, REST_PAUSED]:
-        return jsonify({"time_left": remaining_time_when_paused, "state": state})
+        return jsonify({"time_left": remaining_time_when_paused, "state": state, "eyeValues": glassesValues})
     
     time_left = end_time - current_time
 

@@ -33,6 +33,12 @@ const Dashboard = () => {
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
           }
+          if((data.eyeValues[2] < 3) && (data.state === 3)) {
+            controlTimer("pause")
+          } else if((data.eyeValues[2] >= 3) && (data.state === 4)) {
+            controlTimer("resume")
+            setState(3)
+          }
 
           console.log(state);
         } else {
