@@ -69,29 +69,63 @@ function Countdown() {
         <h1>
           {minutes}:{seconds}
         </h1>
+        {state === 0 && (
+          <Button onClick={() => controlTimer("start")}>Start</Button>
+        )}
+        {(state === 2 || state === 4) && (
+          <>
+            <h3>left in your focus state</h3>
+            <Button onClick={() => controlTimer("resume")}>Resume</Button>
+          </>
+        )}
+        {(state === 1 || state === 3) && (
+          <>
+            <h3>PAUSED</h3>
+            <Button onClick={() => controlTimer("pause")}>Pause</Button>
+          </>
+        )}
       </CountdownBox>
-      {state === 0 && (
-        <button onClick={() => controlTimer("start")}>Start</button>
-      )}
-      {(state === 2 || state === 4) && (
-        <button onClick={() => controlTimer("resume")}>Resume</button>
-      )}
-      {(state === 1 || state === 3) && (
-        <button onClick={() => controlTimer("pause")}>Pause</button>
-      )}
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 100%;
-  padding: 40px 16vw;
-  display
+  width: 100vw;
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
 `;
 
 const CountdownBox = styled.div`
-  width: 100%;
+  width: 40vw;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  gap: 20px;
+  border-radius: 10px;
+  border: 1px solid #b7b4b0;
+  background: #fcf9f7;
+
+  > h1 {
+    font-size: 64px;
+    line-height: 64px;
+  }
+`;
+
+const Button = styled.button`
+  border: none;
+  background-color: #222222;
+  border-radius: 6px;
+  color: white;
+  padding: 12px;
+  padding-left: 22px;
+  padding-right: 22px;
+  cursor: pointer;
+  transition: all 500ms;
+  :hover {
+    background-color: #dd8134;
+  }
 `;
 
 export default Countdown;
