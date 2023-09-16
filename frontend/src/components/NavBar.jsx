@@ -33,27 +33,21 @@ const NavBarContainer = styled.div`
   padding: 8px;
   padding-left: 40px;
   padding-right: 40px;
-  background-color: #FDFDFD;
-  border-bottom: 1px solid #D6D6D6;
+  background-color: #fdfdfd;
+  border-bottom: 1px solid #d6d6d6;
 `;
 
 const LogoLink = styled(Link)`
-  text-decoration: none,
+  text-decoration: none;
+  transition: all 500ms;
+  color: black;
   :hover {
-    color: #ED809C;
-  }
-`;
-
-const LogoLink = styled(Link)`
-  text-decoration: none,
-  :hover {
-    color: #ED809C;
+    color: #ed809c;
   }
 `;
 
 const LogoContainer = styled.h1`
   font-family: Helvetica Now Display;
-  color: black;
   font-size: 20px;
   padding: 0;
   margin-top: 16px;
@@ -91,13 +85,18 @@ const RightSideContainer = styled.div`
     cursor: pointer;
     transition: all 500ms;
     transition: background 0.5s;
-    background: linear-gradient(90deg, var(--c1, #f6d365), var(--c2, #fda085) 51%, var(--c1, #f6d365)) var(--x, 0)/ 200%;
-    --c2: #FCA27C;
-    --c1: #FF5AB4;
+    background: linear-gradient(
+        90deg,
+        var(--c1, #f6d365),
+        var(--c2, #fda085) 51%,
+        var(--c1, #f6d365)
+      )
+      var(--x, 0) / 200%;
+    --c2: #fca27c;
+    --c1: #ff5ab4;
     :hover {
       --x: 100%;
     }
-    
   }
 `;
 

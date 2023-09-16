@@ -19,6 +19,11 @@ function Countdown() {
           const data = await response.json();
           setTimeLeft(Math.floor(data.time_left));
           setState(data.state);
+
+          if (data.time_left <= 0 && data.state === 3) {
+            alert("Time to take an eye break!");
+          }
+
           console.log(state);
         } else {
           console.log("Server returned an error");
@@ -65,7 +70,9 @@ function Countdown() {
 
   return (
     <Container>
-      <CountdownBox>
+      <CountdownBox
+        style={{ color: state === 1 || state === 3 ? "black" : "grey" }}
+      >
         <h1>
           {minutes}:{seconds}
         </h1>
