@@ -1,13 +1,16 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
+
 const Header = () => {
+  const nav = useNavigate();
   return (
     <HeaderContainer>
       <TextContainer>
         <h1>Meet Visionary, the <span>Apple</span> of your <span>Eye</span>.</h1>
         <p>Correct harmful eye habits before its too late with the Visionary glasses and built-in app.</p>
-        <button>Get Started</button>
+        <button onClick={() => nav('./dashboard')}>Get Started</button>
       </TextContainer>
     </HeaderContainer>
   )
