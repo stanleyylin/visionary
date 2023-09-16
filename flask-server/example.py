@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test psycopg with CockroachDB.
+Test psycopg with CockroachDB for Screen Time Tracking.
 """
 
 import logging
@@ -20,10 +20,10 @@ def create_accounts(conn):
     id2 = uuid.uuid4()
     with conn.cursor() as cur:
         cur.execute(
-            "CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY, balance INT)"
+            "CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY, screen_time INT)"
         )
         cur.execute(
-            "UPSERT INTO accounts (id, balance) VALUES (%s, 1000), (%s, 250)", (id1, id2))
+            "UPSERT INTO accounts (id, screen_time) VALUES (%s, 120), (%s, 60)", (id1, id2))
         logging.debug("create_accounts(): status message: %s",
                       cur.statusmessage)
     return [id1, id2]
@@ -36,35 +36,11 @@ def delete_accounts(conn):
                       cur.statusmessage)
 
 
-def print_balances(conn):
+def print_screen_time(conn):
     with conn.cursor() as cur:
-        print(f"Balances at {time.asctime()}:")
-        for row in cur.execute("SELECT id, balance FROM accounts"):
-            print("account id: {0}  balance: ${1:2d}".format(row.id, row.balance))
-
-
-def transfer_funds(conn, frm, to, amount):
-    with conn.cursor() as cur:
-
-        # Check the current balance.
-        cur.execute("SELECT balance FROM accounts WHERE id = %s", (frm,))
-        from_balance = cur.fetchone()[0]
-        if from_balance < amount:
-            raise RuntimeError(
-                f"insufficient funds in {frm}: have {from_balance}, need {amount}"
-            )
-
-        # Perform the transfer.
-        cur.execute(
-            "UPDATE accounts SET balance = balance - %s WHERE id = %s", (
-                amount, frm)
-        )
-        cur.execute(
-            "UPDATE accounts SET balance = balance + %s WHERE id = %s", (
-                amount, to)
-        )
-
-    logging.debug("transfer_funds(): status message: %s", cur.statusmessage)
+        print(f"Screen Time at {time.asctime()}:")
+        for row in cur.execute("SELECT id, screen_time FROM accounts"):
+            print("account id: {0}  Screen Time: {1} min".format(row.id, row.screen_time))
 
 
 def run_transaction(conn, op, max_retries=3):
@@ -109,8 +85,8 @@ def main():
     opt = parse_cmdline()
     logging.basicConfig(level=logging.DEBUG if opt.verbose else logging.INFO)
     try:
-        # Attempt to connect to cluster with connection string provided to
-        # script. By default, this script uses the value saved to the
+        # Attempt to connect to the cluster with the connection string provided to
+        # the script. By default, this script uses the value saved to the
         # DATABASE_URL environment variable.
         # For information on supported connection string formats, see
         # https://www.cockroachlabs.com/docs/stable/connect-to-the-database.html.
@@ -119,14 +95,10 @@ def main():
                                application_name="$ docs_simplecrud_psycopg3", 
                                row_factory=namedtuple_row)
         ids = create_accounts(conn)
-        print_balances(conn)
+        print_screen_time(conn)  # Changed to print_screen_time
             
-        amount = 100
-        toId = ids.pop()
-        fromId = ids.pop()
-
         try:
-            run_transaction(conn, lambda conn: transfer_funds(conn, fromId, toId, amount))
+            run_transaction(conn, lambda conn: increment_screen_time(conn, ids))
         except ValueError as ve:
             # Below, we print the error and continue on so this example is easy to
             # run (and run, and run...).  In real code you should handle this error
@@ -137,13 +109,21 @@ def main():
             logging.debug("got error: %s", e)
             raise e
 
-        print_balances(conn)
+        print_screen_time(conn)  # Changed to print_screen_time
 
         delete_accounts(conn)
     except Exception as e:
         logging.fatal("database connection failed")
         logging.fatal(e)
         return
+
+
+def increment_screen_time(conn, ids):
+    with conn.cursor() as cur:
+        for id in ids:
+            cur.execute(
+                "UPDATE accounts SET screen_time = screen_time + 20 WHERE id = %s", (id,))
+    logging.debug("increment_screen_time(): status message: %s", cur.statusmessage)
 
 
 def parse_cmdline():
