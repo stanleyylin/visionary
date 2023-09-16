@@ -1,14 +1,19 @@
-import React from "react";
-import styled from "@emotion/styled";
-
+import React from 'react'
+import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 const NavBar = () => {
+  
   return (
     <NavBarContainer>
       <LogoContainer>Visionary</LogoContainer>
 
       <RightSideContainer>
-        <p>Home</p>
-        <p>Settings</p>
+        <Link className='link'>
+          <p>Home</p>
+        </Link>
+        <Link className='link'>
+          <p>Settings</p>
+        </Link>
         <button>My Dashboard</button>
       </RightSideContainer>
     </NavBarContainer>
@@ -30,7 +35,8 @@ const LogoContainer = styled.h1`
   font-size: 24px;
   padding: 0;
   margin-top: 10px;
-`;
+  
+`
 
 const RightSideContainer = styled.div`
   font-family: Helvetica Now Display;
@@ -39,10 +45,18 @@ const RightSideContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: var(--gap, 3.5rem);
-  > p {
-    margin-top: 10px;
-    font-size: 15px;
-    cursor: pointer;
+  .link {
+    text-decoration: none;
+    color: black;
+    > p {
+      margin-top: 20px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: color 300ms;
+      :hover {
+        color: rgb(100, 100, 100);
+      }
+    }
   }
 
   > button {
@@ -56,7 +70,7 @@ const RightSideContainer = styled.div`
     cursor: pointer;
     transition: all 500ms;
     :hover {
-      background-color: #dd8134;
+      background-color: #DD8134; 
     }
   }
 `;
