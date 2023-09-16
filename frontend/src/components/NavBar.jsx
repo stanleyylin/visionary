@@ -19,11 +19,11 @@ const NavBar = () => {
 
 const NavBarContainer = styled.div`
   position: fixed;
-  width: calc(100vw - 40px);
+  width: calc(100vw - 80px);
   display: flex;
   justify-content: space-between;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
 `
 
 const LogoContainer = styled.h1`
@@ -45,10 +45,22 @@ const RightSideContainer = styled.div`
   > p {
     margin-top: 10px;
     font-size: 15px;
+    cursor: pointer;
   }
 
   > button {
-
+    border: none;
+    background-color: #222222;
+    border-radius: 6px;
+    color: white;
+    padding: 12px;
+    padding-left: 22px;
+    padding-right: 22px;
+    cursor: pointer;
+    transition: all 500ms;
+    :hover {
+      background-color: #DD8134; 
+    }
   }
 `
 
