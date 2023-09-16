@@ -1,12 +1,10 @@
-import React from 'react'
-import styled from '@emotion/styled';
+import React from "react";
+import styled from "@emotion/styled";
 
 const NavBar = () => {
   return (
     <NavBarContainer>
-      <LogoContainer>
-        Visionary
-      </LogoContainer>
+      <LogoContainer>Visionary</LogoContainer>
 
       <RightSideContainer>
         <p>Home</p>
@@ -14,8 +12,8 @@ const NavBar = () => {
         <button>My Dashboard</button>
       </RightSideContainer>
     </NavBarContainer>
-  )
-}
+  );
+};
 
 const NavBarContainer = styled.div`
   position: fixed;
@@ -24,7 +22,7 @@ const NavBarContainer = styled.div`
   justify-content: space-between;
   padding-left: 40px;
   padding-right: 40px;
-`
+`;
 
 const LogoContainer = styled.h1`
   font-family: Helvetica Now Display;
@@ -32,8 +30,7 @@ const LogoContainer = styled.h1`
   font-size: 24px;
   padding: 0;
   margin-top: 10px;
-  
-`
+`;
 
 const RightSideContainer = styled.div`
   font-family: Helvetica Now Display;
@@ -59,9 +56,9 @@ const RightSideContainer = styled.div`
     cursor: pointer;
     transition: all 500ms;
     :hover {
-      background-color: #DD8134; 
+      background-color: #dd8134;
     }
   }
-`
+`;
 
-export default NavBar
+export default NavBar;

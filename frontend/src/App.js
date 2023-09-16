@@ -10,9 +10,9 @@ function App() {
     <Fragment>
       <NavBar />
       <Routes>
-        <Route index element={Home}/>
-        <Route path="/settings" element={Settings} />
-        <Route path="/dashboard" element={Dashboard} />
+        <Route index element={<Home />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Fragment>
   );
