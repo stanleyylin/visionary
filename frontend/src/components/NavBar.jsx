@@ -33,7 +33,7 @@ const NavBarContainer = styled.div`
   padding: 8px;
   padding-left: 40px;
   padding-right: 40px;
-  background-color: rgba(252, 252, 254, 0.8);
+  background-color: rgba(245, 245, 247, 0.7);
   border-bottom: 1px solid #D6D6D6;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
@@ -41,9 +41,6 @@ const NavBarContainer = styled.div`
 
 const LogoLink = styled(Link)`
   text-decoration: none;
-  :hover {
-    color: #ED809C;
-  }
 `;
 
 const LogoContainer = styled.h1`
@@ -51,7 +48,26 @@ const LogoContainer = styled.h1`
   font-size: 20px;
   padding: 0;
   margin-top: 16px;
+  font-weight: 600;
+  transition: background 0.5s;
+  background: linear-gradient(
+    90deg,
+    var(--c1, #f6d365),
+    var(--c2, #fda085) 51%,
+    var(--c1, #f6d365)
+  )
+  var(--x, 0) / 200%;
+  --c2: #fca27c;
+  --c1: #ff5ab4;
+  :hover {
+    --x: 100%;
+  }
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-text-fill-color: transparent;
 `;
+
 
 const RightSideContainer = styled.div`
   font-family: Helvetica Now Display;

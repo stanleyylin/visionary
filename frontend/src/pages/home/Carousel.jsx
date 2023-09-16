@@ -9,7 +9,6 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const Carousel = () => {
   const settings = {
-    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,

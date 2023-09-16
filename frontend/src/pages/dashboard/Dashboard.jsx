@@ -69,7 +69,7 @@ const Dashboard = () => {
   const seconds = String(timeLeft % 60).padStart(2, "0");
 
   return (
-    <PageContainer
+    <PageContainer className={state in [0, 1, 2] ? 'white' : state === 3 ? 'gradient' : 'paused'}
       style={{
         backgroundColor:
           state in [0, 1, 2] ? "white" : state === 3 ? "#ed809c" : "#353330",
@@ -155,10 +155,18 @@ const Dashboard = () => {
 };
 
 const PageContainer = styled.div`
-  width: 100%;
+  width: calc(100vw - 160px);
   padding: 80px;
-  height: 100vh;
   transition: all 500ms;
+  &.white {
+    background-color: #FEFFFF;
+  }
+  &.gradient {
+    background-image: linear-gradient(to bottom right, #FCA27C, #FF5AB4);
+  }
+  &.paused {
+    background-color: #464646;
+  }
 `;
 
 const Container = styled.div`

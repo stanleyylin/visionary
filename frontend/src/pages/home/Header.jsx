@@ -5,8 +5,8 @@ const Header = () => {
   return (
     <HeaderContainer>
       <TextContainer>
-        <h1>The <span>Solution</span> to Preventing Eye Issues</h1>
-        <p>Correct harmful eye habits before its too late.</p>
+        <h1>Meet Visionary, the <span>Apple</span> of your <span>Eye</span>.</h1>
+        <p>Correct harmful eye habits before its too late with the Visionary glasses and built-in app.</p>
         <button>Get Started</button>
       </TextContainer>
     </HeaderContainer>
@@ -62,6 +62,7 @@ const TextContainer = styled.div`
     :hover {
       --x: 100%;
     }
+    
     
   }
 
