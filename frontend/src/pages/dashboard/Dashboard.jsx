@@ -6,6 +6,7 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
+
   useEffect(() => {
     const fetchTimeLeft = async () => {
       try {
@@ -33,14 +34,15 @@ const Dashboard = () => {
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
           }
-          if((data.eyeValues[2] < 3) && (data.state === 3)) {
+          if((data.eyeValues[2] > -2) && (data.state === 3)) {
             controlTimer("pause")
-          } else if((data.eyeValues[2] >= 3) && (data.state === 4)) {
+
+          } else if((data.eyeValues[2] <= -2) && (data.state === 4)) {
             controlTimer("resume")
-            setState(3)
+            //setState(3)
           }
 
-          console.log(state);
+          console.log(state)
         } else {
           console.log("Server returned an error");
         }
@@ -57,6 +59,15 @@ const Dashboard = () => {
       clearInterval(intervalId);
     };
   }, []);
+
+  const connectToGlasses = async () => {
+    await fetch("http://127.0.0.1:5000/connectToGlasses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
 
   const controlTimer = async (action) => {
     await fetch("http://127.0.0.1:5000/control", {
@@ -94,7 +105,17 @@ const Dashboard = () => {
           state in [0, 1, 2] ? "white" : state === 3 ? "#ed809c" : "#353330",
       }}
     >
+      
       <Container style={{ color: state in [0, 1, 2] ? "black" : "white" }}>
+        <Button
+          style={{
+            backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
+            color: state in [0, 1, 2] ? "white" : "black",
+          }}
+          onClick={() => connectToGlasses()}
+        >
+          Connect To AdHawk
+        </Button>
         <CountdownBox
           style={{
             color:
@@ -163,7 +184,7 @@ const Dashboard = () => {
         >
           <DataBox>
             <h3>Depth</h3>
-            <p>{depthValue}</p>
+            <p>{Number(depthValue).toFixed(5)}</p>
           </DataBox>
           <DataBox>
             <h3>Orientation</h3>

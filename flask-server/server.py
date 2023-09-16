@@ -37,7 +37,7 @@ def control():
     if action == "start":
         state = WORK_RUNNING
         end_time = current_time + WORK_BLOCK
-        frontend = FrontendData()
+        
         
     elif action == "pause":
         if state in [WORK_RUNNING, REST_RUNNING]:
@@ -50,6 +50,11 @@ def control():
             end_time = current_time + remaining_time_when_paused
 
     return jsonify({"status": "ok"})
+
+@app.route('/connectToGlasses', methods=['POST'])
+def connectToGlasses():
+    global frontend
+    frontend = FrontendData()
 
 @app.route('/time_left')
 def time_left():

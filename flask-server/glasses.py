@@ -92,15 +92,15 @@ class FrontendData:
         print("Tracker disconnected")
 
 
-def main():
-    ''' App entrypoint '''
-    frontend = FrontendData()
-    try:
-        while True:
-            time.sleep(1)
-            print(gazeValues)
-    except (KeyboardInterrupt, SystemExit):
-        frontend.shutdown()
+# def main():
+#     ''' App entrypoint '''
+#     frontend = FrontendData()
+#     try:
+#         while True:
+#             time.sleep(1)
+#             #print(gazeValues)
+#     except (KeyboardInterrupt, SystemExit):
+#         frontend.shutdown()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
