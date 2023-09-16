@@ -29,8 +29,19 @@ const NavBarContainer = styled.div`
   width: calc(100vw - 80px);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 8px;
   padding-left: 40px;
   padding-right: 40px;
+  background-color: #FDFDFD;
+  border-bottom: 1px solid #D6D6D6;
+`;
+
+const LogoLink = styled(Link)`
+  text-decoration: none,
+  :hover {
+    color: #ED809C;
+  }
 `;
 
 const LogoLink = styled(Link)`
@@ -43,7 +54,7 @@ const LogoLink = styled(Link)`
 const LogoContainer = styled.h1`
   font-family: Helvetica Now Display;
   color: black;
-  font-size: 24px;
+  font-size: 20px;
   padding: 0;
   margin-top: 16px;
 `;
@@ -71,17 +82,22 @@ const RightSideContainer = styled.div`
 
   > button {
     border: none;
-    background-color: #222222;
     border-radius: 6px;
     color: white;
-    padding: 12px;
+    padding: 10px;
+    margin-top: 2px;
     padding-left: 22px;
     padding-right: 22px;
     cursor: pointer;
     transition: all 500ms;
+    transition: background 0.5s;
+    background: linear-gradient(90deg, var(--c1, #f6d365), var(--c2, #fda085) 51%, var(--c1, #f6d365)) var(--x, 0)/ 200%;
+    --c2: #FCA27C;
+    --c1: #FF5AB4;
     :hover {
-      background-color: #ed809c;
+      --x: 100%;
     }
+    
   }
 `;
 

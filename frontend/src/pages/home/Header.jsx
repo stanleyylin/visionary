@@ -24,12 +24,14 @@ const HeaderContainer = styled.div`
 
 
 const TextContainer = styled.div`
-  width: 37vw;
+  width: 48vw;
   margin-left: 15vw;
   font-family: Helvetica Now Display;
   > h1 {
-    font-size: 50px;
-    margin-bottom: -4px;
+    line-height: 1.4;
+    font-size: 54px;
+    margin-bottom: 2px;
+    font-weight: 700;
     > span {
       background-image: linear-gradient(to bottom right, #FCA27C, #FF5AB4);
       background-size: 100%;
@@ -40,7 +42,7 @@ const TextContainer = styled.div`
     }
   }
   > p {
-    font-size: 24px;
+    font-size: 22px;
     margin-bottom: 60px;
   }
   > button {
@@ -49,12 +51,11 @@ const TextContainer = styled.div`
     border-radius: 6px;
     color: white;
     padding: 16px;
+    font-size: 18px;
     padding-left: 47px;
     padding-right: 47px;
     cursor: pointer;
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
-    transition: 0.5s;
+    transition: background 0.5s;
     background: linear-gradient(90deg, var(--c1, #f6d365), var(--c2, #fda085) 51%, var(--c1, #f6d365)) var(--x, 0)/ 200%;
     --c1: #FCA27C;
     --c2: #FF5AB4;

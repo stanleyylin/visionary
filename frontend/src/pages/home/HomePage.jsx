@@ -13,9 +13,9 @@ const HomePage = () => {
 }
 
 const HomeContainer = styled.div`
-display: flex;
-color: black;
-flex-direction: column;
+  display: flex;
+  color: black;
+  flex-direction: column;
 `
 
 export default HomePage

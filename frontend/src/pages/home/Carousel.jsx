@@ -29,7 +29,7 @@ const Carousel = () => {
         ))}
       </Swiper>
 
-      <div>
+      <CarouselControlContainer>
         <button 
           className="carousel-control" 
           onClick={() => slider?.current?.slickPrev()}
@@ -43,7 +43,7 @@ const Carousel = () => {
           &gt;
         </button>
 
-      </div>
+      </CarouselControlContainer>
       
     </CarouselContainer>
   )
@@ -53,30 +53,32 @@ const CarouselContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
-  
+`
 
+const CarouselControlContainer = styled.div`
+  align-self: center;
 `
 
 const cards = [
   {
-    content: "Is Visionary easy-to-use with Adhawk's Glasses?",
-    answer: "Yup"
+    content: <p>Is Visionary easy-to-use with <span> Adhawk's Glasses? </span></p>,
+    answer: "yup"
   },
   {
-    content: "Does it provide metrics for my eye habits?",
-    answer: "Of course"
+    content: <p>Does it provide <span>metrics</span> for my eye habits?</p>,
+    answer: "of course"
   },
   {
-    content: "Can it alert me to take frequent screen breaks?",
-    answer: "Definitely"
+    content: <p>Can it alert me to take <span>frequent screen breaks</span>?</p>,
+    answer: "definitely"
   },
   {
-    content: "Will it remedy myopia, eye strain, and other conditions?",
-    answer: "Absolutely"
+    content: <p>Could it remedy my <span>myopia, eye strain, and other conditions</span>?</p>,
+    answer: "for sure"
   },
   {
-    content: "Is it reliable?",
-    answer: "For sure"
+    content: <p>Is it <span>reliable</span> and <span>effective</span>?</p>,
+    answer: "on god"
   },
 ]
 export default Carousel
