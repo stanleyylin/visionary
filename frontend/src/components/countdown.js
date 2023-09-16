@@ -69,21 +69,25 @@ function Countdown() {
         <h1>
           {minutes}:{seconds}
         </h1>
-        {state === 0 && (
-          <Button onClick={() => controlTimer("start")}>Start</Button>
-        )}
-        {(state === 2 || state === 4) && (
-          <>
-            <h3>left in your focus state</h3>
+        <div>
+          {(state === 1 || state === 2) && <h3>left in your focus state.</h3>}
+          {state === 3 && <h3>left in your eye break.</h3>}
+          {state === 4 && (
+            <>
+              <h2>EYE BREAK PAUSED</h2>
+              <h3>Look 20ft away to continue your eye break.</h3>
+            </>
+          )}
+          {state === 0 && (
+            <Button onClick={() => controlTimer("start")}>Start</Button>
+          )}
+          {(state === 2 || state === 4) && (
             <Button onClick={() => controlTimer("resume")}>Resume</Button>
-          </>
-        )}
-        {(state === 1 || state === 3) && (
-          <>
-            <h3>PAUSED</h3>
+          )}
+          {(state === 1 || state === 3) && (
             <Button onClick={() => controlTimer("pause")}>Pause</Button>
-          </>
-        )}
+          )}
+        </div>
       </CountdownBox>
     </Container>
   );
@@ -102,14 +106,20 @@ const CountdownBox = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 40px;
-  gap: 20px;
   border-radius: 10px;
   border: 1px solid #b7b4b0;
   background: #fcf9f7;
+  line-height: 16px;
 
   > h1 {
     font-size: 64px;
     line-height: 64px;
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -123,6 +133,7 @@ const Button = styled.button`
   padding-right: 22px;
   cursor: pointer;
   transition: all 500ms;
+  margin-top: 20px;
   :hover {
     background-color: #dd8134;
   }
