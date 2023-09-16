@@ -1,20 +1,24 @@
-import React from 'react'
-import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import React from "react";
+import styled from "@emotion/styled";
+import { Link, useNavigate } from "react-router-dom";
+
 const NavBar = () => {
-  
+  const nav = useNavigate();
+
   return (
     <NavBarContainer>
-      <LogoContainer>Visionary</LogoContainer>
+      <LogoLink to="/">
+        <LogoContainer>Visionary</LogoContainer>
+      </LogoLink>
 
       <RightSideContainer>
-        <Link className='link'>
+        <Link className="link">
           <p>Home</p>
         </Link>
-        <Link className='link'>
+        <Link className="link">
           <p>Settings</p>
         </Link>
-        <button>My Dashboard</button>
+        <button onClick={() => nav("/dashboard")}>My Dashboard</button>
       </RightSideContainer>
     </NavBarContainer>
   );
@@ -29,14 +33,20 @@ const NavBarContainer = styled.div`
   padding-right: 40px;
 `;
 
+const LogoLink = styled(Link)`
+  text-decoration: none,
+  :hover {
+    color: #ED809C;
+  }
+`;
+
 const LogoContainer = styled.h1`
   font-family: Helvetica Now Display;
   color: black;
   font-size: 24px;
   padding: 0;
-  margin-top: 10px;
-  
-`
+  margin-top: 16px;
+`;
 
 const RightSideContainer = styled.div`
   font-family: Helvetica Now Display;
@@ -49,7 +59,7 @@ const RightSideContainer = styled.div`
     text-decoration: none;
     color: black;
     > p {
-      margin-top: 20px;
+      margin-top: 16px;
       font-size: 15px;
       cursor: pointer;
       transition: color 300ms;
@@ -70,7 +80,7 @@ const RightSideContainer = styled.div`
     cursor: pointer;
     transition: all 500ms;
     :hover {
-      background-color: #DD8134; 
+      background-color: #ed809c;
     }
   }
 `;

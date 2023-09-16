@@ -5,9 +5,7 @@ import styled from "@emotion/styled";
 const Dashboard = () => {
   return (
     <PageContainer>
-      <div>
-        <Countdown />
-      </div>
+      <Countdown />
     </PageContainer>
   );
 };

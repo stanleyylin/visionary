@@ -89,14 +89,32 @@ function Countdown() {
           )}
         </div>
       </CountdownBox>
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          width: "40vw",
+        }}
+      >
+        <DataBox>
+          <h3>Depth</h3>
+        </DataBox>
+        <DataBox>
+          <h3>Orientation</h3>
+        </DataBox>
+      </div>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 100vw;
   padding: 80px 0;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  gap: 20px;
   justify-content: center;
 `;
 
@@ -105,10 +123,12 @@ const CountdownBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px;
+  align-self: center;
+  justify-content: center;
+  padding: 40px 0;
   border-radius: 10px;
-  border: 1px solid #b7b4b0;
-  background: #fcf9f7;
+  border: 1px solid #f0e5e5;
+  background: #fdf9f9;
   line-height: 16px;
 
   > h1 {
@@ -135,8 +155,16 @@ const Button = styled.button`
   transition: all 500ms;
   margin-top: 20px;
   :hover {
-    background-color: #dd8134;
+    background-color: #ed809c;
   }
+`;
+
+const DataBox = styled.div`
+  padding: 40px;
+  border-radius: 10px;
+  border: 1px solid #f0e5e5;
+  background: #fdf9f9;
+  width: 100%;
 `;
 
 export default Countdown;
