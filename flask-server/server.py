@@ -1,3 +1,5 @@
+from glasses import FrontendData
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import time
@@ -23,17 +25,24 @@ REST_BLOCK = 21  # 20 minutes in seconds
 
 end_time = None
 remaining_time_when_paused = None
+frontend = None
+glassesValues = None
+
+
 
 @app.route('/control', methods=['POST'])
 def control():
     global state, end_time, remaining_time_when_paused
+    global frontend
+
     action = request.json.get("action")
-    
     current_time = time.time()
     
     if action == "start":
         state = WORK_RUNNING
         end_time = current_time + WORK_BLOCK
+        frontend = FrontendData()
+        
     elif action == "pause":
         if state in [WORK_RUNNING, REST_RUNNING]:
             remaining_time_when_paused = end_time - current_time
@@ -48,8 +57,14 @@ def control():
 
 @app.route('/time_left')
 def time_left():
-    global state, end_time
+    global state, end_time, frontend, glassesValues
     current_time = time.time()
+
+    print(frontend)
+    if(frontend != None):
+        print(frontend.getValues())
+        glassesValues = frontend.getValues()
+
 
     if state == NOT_STARTED:
         return jsonify({"time_left": 0, "state": state})
@@ -66,7 +81,7 @@ def time_left():
             state = REST_RUNNING if state == WORK_RUNNING else WORK_RUNNING
             end_time = current_time + (REST_BLOCK if state == REST_RUNNING else WORK_BLOCK)
 
-    return jsonify({"time_left": time_left, "state": state})
+    return jsonify({"time_left": time_left, "state": state, "eyeValues": glassesValues})
 
 @app.route('/reset', methods=['POST'])
 def reset():

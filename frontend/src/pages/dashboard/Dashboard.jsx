@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
 const Dashboard = () => {
+  const [depthValue, setDepthValue] = useState(0)
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
@@ -18,6 +19,7 @@ const Dashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setTimeLeft(Math.floor(data.time_left));
+          setDepthValue(data.eyeValues[2])
           setState(data.state);
 
           if (data.time_left <= 0 && data.state === 3) {
@@ -144,6 +146,7 @@ const Dashboard = () => {
         >
           <DataBox>
             <h3>Depth</h3>
+            <p>{depthValue}</p>
           </DataBox>
           <DataBox>
             <h3>Orientation</h3>

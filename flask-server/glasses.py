@@ -1,4 +1,6 @@
 ''' Demonstrates how to subscribe to and handle data from gaze and event streams '''
+# cd OneDrive/Desktop/interactive_fitting_win
+#./interactive_fitting.exe "ADHAWK MINDLINK-295"
 
 import time
 
@@ -9,6 +11,9 @@ gazeValues = []
 
 class FrontendData:
     ''' BLE Frontend '''
+
+    def getValues(self):
+        return gazeValues
 
     def __init__(self):
         # Instantiate an API object
@@ -71,7 +76,7 @@ class FrontendData:
 
     def _handle_tracker_connect(self):
         print("Tracker connected")
-        self._api.set_et_stream_rate(1, callback=lambda *args: None)
+        self._api.set_et_stream_rate(60, callback=lambda *args: None)
 
         self._api.set_et_stream_control([
             adhawkapi.EyeTrackingStreamTypes.GAZE,
