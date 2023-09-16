@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
 const Dashboard = () => {
-  const [depthValue, setDepthValue] = useState(0)
+  const [depthValue, setDepthValue] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
@@ -19,7 +19,15 @@ const Dashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setTimeLeft(Math.floor(data.time_left));
-          setDepthValue(data.eyeValues[2])
+
+          if (data.eyeValues && data.eyeValues.length > 2) {
+            setDepthValue(data.eyeValues[2]);
+          } else {
+            console.warn(
+              "eyeValues is either undefined or does not have enough elements."
+            );
+          }
+
           setState(data.state);
 
           if (data.time_left <= 0 && data.state === 3) {
@@ -71,7 +79,10 @@ const Dashboard = () => {
   const seconds = String(timeLeft % 60).padStart(2, "0");
 
   return (
-    <PageContainer className={state in [0, 1, 2] ? 'white' : state === 3 ? 'gradient' : 'paused'}
+    <PageContainer
+      className={
+        state in [0, 1, 2] ? "white" : state === 3 ? "gradient" : "paused"
+      }
       style={{
         backgroundColor:
           state in [0, 1, 2] ? "white" : state === 3 ? "#ed809c" : "#353330",
@@ -162,10 +173,10 @@ const PageContainer = styled.div`
   padding: 80px;
   transition: all 500ms;
   &.white {
-    background-color: #FEFFFF;
+    background-color: #feffff;
   }
   &.gradient {
-    background-image: linear-gradient(to bottom right, #FCA27C, #FF5AB4);
+    background-image: linear-gradient(to bottom right, #fca27c, #ff5ab4);
   }
   &.paused {
     background-color: #464646;
