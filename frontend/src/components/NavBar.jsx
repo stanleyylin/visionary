@@ -12,10 +12,10 @@ const NavBar = () => {
       </LogoLink>
 
       <RightSideContainer>
-        <Link className="link">
+        <Link className="link" to={"/"}>
           <p>Home</p>
         </Link>
-        <Link className="link">
+        <Link className="link" to={"/settings"}>
           <p>Settings</p>
         </Link>
         <button onClick={() => nav("/dashboard")}>My Dashboard</button>
@@ -33,16 +33,16 @@ const NavBarContainer = styled.div`
   padding: 8px;
   padding-left: 40px;
   padding-right: 40px;
-  background-color: #fdfdfd;
-  border-bottom: 1px solid #d6d6d6;
+  background-color: rgba(252, 252, 254, 0.8);
+  border-bottom: 1px solid #D6D6D6;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 `;
 
 const LogoLink = styled(Link)`
   text-decoration: none;
-  transition: all 500ms;
-  color: black;
   :hover {
-    color: #ed809c;
+    color: #ED809C;
   }
 `;
 

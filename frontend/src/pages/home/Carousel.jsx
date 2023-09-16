@@ -5,6 +5,7 @@ import './carousel.css';
 import CarouselCard from '../../components/CarouselCard';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const Carousel = () => {
   const settings = {
@@ -34,13 +35,13 @@ const Carousel = () => {
           className="carousel-control" 
           onClick={() => slider?.current?.slickPrev()}
         >
-          &lt;
+          <IoIosArrowBack/>
         </button>
         <button 
           className="carousel-control" 
           onClick={() => slider?.current?.slickNext()}
         >
-          &gt;
+          <IoIosArrowForward/>
         </button>
 
       </CarouselControlContainer>
@@ -52,11 +53,13 @@ const Carousel = () => {
 const CarouselContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
+  margin-top: -40px;
 `
 
 const CarouselControlContainer = styled.div`
   align-self: center;
+  display: flex;
 `
 
 const cards = [
