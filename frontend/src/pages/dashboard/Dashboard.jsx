@@ -136,7 +136,7 @@ const Dashboard = () => {
     };
 
     // Specify the Firestore document reference where you want to add the data
-    const dataDocRef = doc(db, "accounts", "your_document_id"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
+    const dataDocRef = doc(db, "accounts", "r8lR54AHrJfdozDbqllp"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
 
     // Use setDoc to add or update the document
     setDoc(dataDocRef, newDataEntry)
