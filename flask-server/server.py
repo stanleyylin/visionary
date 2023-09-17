@@ -70,7 +70,7 @@ def time_left():
     global state, end_time, frontend, gazeValues, pupilValue
     current_time = time.time()
 
-    print(frontend)
+    #print(frontend)
     if(frontend != None):
         print(frontend.getGazeValues())
         gazeValues = frontend.getGazeValues()
