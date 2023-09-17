@@ -36,6 +36,7 @@ const Dashboard = () => {
 
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
+            controlTimer("pause")
           }
           if((data.gazeValues[2] > -3) && (data.state === 3)) {
             controlTimer("pause")
@@ -43,7 +44,7 @@ const Dashboard = () => {
             controlTimer("resume")
           }
 
-          console.log(state)
+          //console.log(state)
         } else {
           console.log("Server returned an error");
         }
@@ -73,12 +74,12 @@ const Dashboard = () => {
     } else {
       setConnectString("Connecting...")
       await fetch("http://127.0.0.1:5000/connectToGlasses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      const response = await fetch("http://127.0.0.1:5000/connectToGlasses", {
+      await fetch("http://127.0.0.1:5000/connectToGlasses", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
