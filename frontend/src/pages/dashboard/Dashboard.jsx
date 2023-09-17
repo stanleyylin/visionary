@@ -130,9 +130,9 @@ const Dashboard = () => {
   const addDataEntry = () => {
     const timestamp = Timestamp.now(); // Use Timestamp.now() to get the current timestamp
     const newDataEntry = {
-      timestamp,
-      distanceValue,
-      pupilValue,
+      timestamp: timestamp,
+      distanceValue: distanceValue,
+      pupilValue: pupilValue,
     };
 
     // Specify the Firestore document reference where you want to add the data
