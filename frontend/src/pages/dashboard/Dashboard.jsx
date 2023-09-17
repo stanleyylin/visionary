@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
 import DataDisplay from "../../components/DataDisplay";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import db from "../../firebase";
 
 const Dashboard = () => {
@@ -127,18 +128,20 @@ const Dashboard = () => {
   }, []);
 
   const addDataEntry = () => {
-    const timestamp = new Date().toLocaleTimeString();
+    const timestamp = Timestamp.now(); // Use Timestamp.now() to get the current timestamp
     const newDataEntry = {
       timestamp,
       distanceValue,
       pupilValue,
     };
 
-    // Add the data entry to Firestore
-    db.collection("accounts")
-      .add(newDataEntry)
-      .then((docRef) => {
-        console.log("Data entry written with ID: ", docRef.id);
+    // Specify the Firestore document reference where you want to add the data
+    const dataDocRef = doc(db, "accounts", "your_document_id"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
+
+    // Use setDoc to add or update the document
+    setDoc(dataDocRef, newDataEntry)
+      .then(() => {
+        console.log("Data entry added successfully");
       })
       .catch((error) => {
         console.error("Error adding data entry: ", error);

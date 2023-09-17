@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
 import db from "../firebase";
+import { doc, getDoc } from "firebase/firestore"; // Import the necessary Firebase Firestore functions
 
 function DataDisplay() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const snapshot = await db.collection("accounts").get();
-        const fetchedData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(fetchedData);
+        const docRef = doc(db, "accounts", "r8lR54AHrJfdozDbqllp"); // Replace "your_document_id" with the actual document ID you want to retrieve
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setData({
+            id: docSnap.id,
+            ...docSnap.data(),
+          });
+        } else {
+          console.log("No such document!");
+        }
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
+    fetchData();
   }, []);
 
   return (
@@ -27,15 +36,9 @@ function DataDisplay() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <>
-          <ul>
-            {data.map((item) => (
-              <li key={item.id}>
-                Account ID: {item.id}, Distance: {item.distance} m
-              </li>
-            ))}
-          </ul>
-        </>
+        <p>
+          ID: {data.id}, Distance: {data.distance} m
+        </p>
       )}
     </div>
   );
