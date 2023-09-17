@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import LineChart from "../../components/LineChart";
 
 const Dashboard = () => {
   const [distanceValue, setDistanceValue] = useState(0);
@@ -7,7 +8,9 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
-  const [connectString, setConnectString] = useState('Connect to AdHawk')
+  const [connectString, setConnectString] = useState("Connect to AdHawk");
+
+  const sampleData = [6, 7, 9, 8, 6, 7, 6, 5, 6.5, 7, 8];
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -30,18 +33,18 @@ const Dashboard = () => {
               "eyeValues is either undefined or does not have enough elements."
             );
           }
-          setPupilValue(data.pupilValue)
+          setPupilValue(data.pupilValue);
 
           setState(data.state);
 
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
-            controlTimer("pause")
+            controlTimer("pause");
           }
-          if((data.gazeValues[2] > -3) && (data.state === 3)) {
-            controlTimer("pause")
-          } else if((data.gazeValues[2] <= -3) && (data.state === 4)) {
-            controlTimer("resume")
+          if (data.gazeValues[2] > -3 && data.state === 3) {
+            controlTimer("pause");
+          } else if (data.gazeValues[2] <= -3 && data.state === 4) {
+            controlTimer("resume");
           }
 
           //console.log(state)
@@ -63,8 +66,8 @@ const Dashboard = () => {
   }, []);
 
   const connectToGlasses = async () => {
-    if(connectString === "Connecting..." || connectString === "Connected") {
-      setConnectString("Connect to AdHawk")
+    if (connectString === "Connecting..." || connectString === "Disconnect") {
+      setConnectString("Connect to AdHawk");
       await fetch("http://127.0.0.1:5000/disconnect", {
         method: "POST",
         headers: {
@@ -72,7 +75,7 @@ const Dashboard = () => {
         },
       });
     } else {
-      setConnectString("Connecting...")
+      setConnectString("Connecting...");
       await fetch("http://127.0.0.1:5000/connectToGlasses", {
         method: "POST",
         headers: {
@@ -86,7 +89,7 @@ const Dashboard = () => {
         },
       });
       //console.log(response)
-      setConnectString("Connected")
+      setConnectString("Disconnect");
     }
   };
 
@@ -126,17 +129,23 @@ const Dashboard = () => {
           state in [0, 1, 2] ? "white" : state === 3 ? "#ed809c" : "#353330",
       }}
     >
-      
       <Container style={{ color: state in [0, 1, 2] ? "black" : "white" }}>
-        <Button
-          style={{
-            backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
-            color: state in [0, 1, 2] ? "white" : "black",
-          }}
-          onClick={() => connectToGlasses()}
-        >
-          {connectString}
-        </Button>
+        <ConnectBox>
+          <h4>
+            {connectString === "Disconnect"
+              ? "Your glasses are connected"
+              : "Connect your glasses to start"}
+          </h4>
+          <Button
+            style={{
+              backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
+              color: state in [0, 1, 2] ? "white" : "black",
+            }}
+            onClick={() => connectToGlasses()}
+          >
+            {connectString}
+          </Button>
+        </ConnectBox>
         <CountdownBox
           style={{
             color:
@@ -212,6 +221,17 @@ const Dashboard = () => {
             <p>{Number(pupilValue).toFixed(5)}</p>
           </DataBox>
         </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            width: "40vw",
+          }}
+        >
+          <DataBox>
+            <LineChart data={sampleData} />
+          </DataBox>
+        </div>
       </Container>
     </PageContainer>
   );
@@ -269,6 +289,19 @@ const CountdownBox = styled.div`
   }
 `;
 
+const ConnectBox = styled.div`
+  width: calc(40vw - 40px);
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #f0e5e5;
+  background: #f0e5e510;
+  line-height: 16px;
+`;
+
 const Button = styled.button`
   border: none;
   border-radius: 6px;
@@ -277,7 +310,6 @@ const Button = styled.button`
   padding-right: 22px;
   cursor: pointer;
   transition: all 500ms;
-  margin-top: 20px;
   :hover {
     opacity: 0.5;
   }
