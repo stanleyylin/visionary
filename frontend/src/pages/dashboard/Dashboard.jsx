@@ -2,7 +2,17 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
 import DataDisplay from "../../components/DataDisplay";
-import { doc, collection, setDoc, addDoc, Timestamp } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  setDoc,
+  addDoc,
+  Timestamp,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 import db from "../../firebase";
 
 const Dashboard = () => {
@@ -14,10 +24,45 @@ const Dashboard = () => {
 
   const [connectString, setConnectString] = useState("Connect to AdHawk");
 
-  const sampleData = [
-    3.4, 2.3, 0.4, 0.44, 0.42, 0.5, 3.1, 2.4, 4, 4.6, 5, 0.54, 0.66, 0.3, 0.5,
-    2.1, 2.4, 1.9, 2.6, 0.5, 0.54, 0.66, 0.5, 0.44, 1.9, 2.6,
-  ];
+  const [distanceData, setDistanceData] = useState([]); // Store sample data for distance values
+  const [pupilData, setPupilData] = useState([]); // Store sample data for pupil values
+
+  useEffect(() => {
+    // Function to fetch the most recent 24 entries from the "accounts" collection
+    const fetchRecentEntries = async () => {
+      try {
+        const entriesRef = collection(db, "accounts");
+        const entriesQuery = query(
+          entriesRef,
+          orderBy("timestamp", "desc"),
+          limit(48)
+        );
+        const querySnapshot = await getDocs(entriesQuery);
+
+        const recentData = querySnapshot.docs
+          .map((doc) => doc.data())
+          .reverse(); // Reverse the order to show the most recent first
+
+        // Extract distance and pupil values into separate arrays
+        const distanceValues = recentData.map((data) => data.distanceValue);
+        const pupilValues = recentData.map((data) => data.pupilValue);
+
+        // Calculate absolute values and set the sampleData states
+        const absoluteDistanceValues = distanceValues.map((value) =>
+          Math.abs(value)
+        );
+        const absolutePupilValues = pupilValues.map((value) => Math.abs(value));
+
+        setDistanceData(absoluteDistanceValues);
+        setPupilData(absolutePupilValues);
+      } catch (error) {
+        console.error("Error fetching recent data:", error);
+      }
+    };
+
+    // Fetch recent data when the component mounts
+    fetchRecentEntries();
+  }, []);
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -274,7 +319,18 @@ const Dashboard = () => {
           }}
         >
           <DataBox>
-            <LineChart data={sampleData} />
+            <LineChart title={"Distance Graph"} data={distanceData} />
+          </DataBox>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            width: "40vw",
+          }}
+        >
+          <DataBox>
+            <LineChart title={"Pupil Graph"} data={pupilData} />
           </DataBox>
         </div>
         <DataDisplay />

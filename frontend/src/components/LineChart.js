@@ -3,6 +3,7 @@ import * as d3 from "d3";
 
 export default function LineChart({
   data,
+  title,
   width = 640,
   height = 400,
   marginTop = 20,
@@ -15,8 +16,9 @@ export default function LineChart({
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const x = d3
-      .scaleTime()
-      .domain([0, 24]) // Assuming data represents 24 hours
+      .scaleLinear()
+      .domain([0, 48]) // Assuming data represents 24 hours
+      .nice()
       .range([marginLeft, width - marginRight]);
 
     const y = d3
@@ -25,7 +27,7 @@ export default function LineChart({
       .nice()
       .range([height - marginBottom, marginTop]);
 
-    const xAxis = d3.axisBottom(x).ticks(24); // 24 ticks for 24 hours
+    const xAxis = d3.axisBottom(x).ticks(48); // 24 ticks for 24 hours
     const yAxis = d3.axisLeft(y);
 
     const line = d3
@@ -66,7 +68,7 @@ export default function LineChart({
 
   return (
     <div>
-      <h3>Distance Over 24 Hours</h3>
+      <h3>{title}</h3>
       <svg ref={svgRef} width={width} height={height}>
         <g className="x-axis" />
         <g className="y-axis" />

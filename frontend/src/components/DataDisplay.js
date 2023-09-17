@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import db from "../firebase";
-import { collection, getDocs } from "firebase/firestore"; // Import the necessary Firebase Firestore functions
+import { collection, getDocs, orderBy, query } from "firebase/firestore"; // Import the necessary Firebase Firestore functions
 
 function DataDisplay() {
   const [data, setData] = useState([]);
@@ -10,7 +10,8 @@ function DataDisplay() {
     const fetchData = async () => {
       try {
         const docRef = collection(db, "accounts"); // Reference the "accounts" collection
-        const querySnapshot = await getDocs(docRef);
+        const q = query(docRef, orderBy("timestamp", "desc")); // Order by timestamp in descending order
+        const querySnapshot = await getDocs(q);
 
         const fetchedData = [];
         querySnapshot.forEach((doc) => {
@@ -32,7 +33,7 @@ function DataDisplay() {
 
   return (
     <div>
-      <h1>Accounts</h1>
+      <h1>Distances & Pupil</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
