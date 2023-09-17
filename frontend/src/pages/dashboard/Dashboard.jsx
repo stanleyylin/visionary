@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
 import DataDisplay from "../../components/DataDisplay";
-import { doc, collection, setDoc, Timestamp } from "firebase/firestore";
+import { doc, collection, setDoc, addDoc, Timestamp } from "firebase/firestore";
 import db from "../../firebase";
 
 const Dashboard = () => {
@@ -135,13 +135,13 @@ const Dashboard = () => {
       pupilValue: pupilValue,
     };
 
-    // Specify the Firestore document reference where you want to add the data
-    const dataDocRef = collection(db, "accounts"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
+    // Specify the Firestore collection reference
+    const dataCollectionRef = collection(db, "accounts"); // Reference the "accounts" collection
 
-    // Use setDoc to add or update the document
-    setDoc(dataDocRef, newDataEntry)
-      .then(() => {
-        console.log("Data entry added successfully");
+    // Use addDoc to add a new document to the collection
+    addDoc(dataCollectionRef, newDataEntry)
+      .then((docRef) => {
+        console.log("Data entry added with ID: ", docRef.id);
       })
       .catch((error) => {
         console.error("Error adding data entry: ", error);
