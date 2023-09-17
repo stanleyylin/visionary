@@ -333,7 +333,7 @@ const Dashboard = () => {
             <LineChart title={"Pupil Graph"} data={pupilData} />
           </DataBox>
         </div>
-        <DataDisplay />
+        {/* <DataDisplay /> */}
       </Container>
     </PageContainer>
   );
