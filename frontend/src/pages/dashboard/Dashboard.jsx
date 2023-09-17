@@ -6,6 +6,8 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
+  const [connectString, setConnectString] = useState('Connect to AdHawk')
+
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -36,10 +38,8 @@ const Dashboard = () => {
           }
           if((data.eyeValues[2] > -2) && (data.state === 3)) {
             controlTimer("pause")
-
           } else if((data.eyeValues[2] <= -2) && (data.state === 4)) {
             controlTimer("resume")
-            //setState(3)
           }
 
           console.log(state)
@@ -61,12 +61,31 @@ const Dashboard = () => {
   }, []);
 
   const connectToGlasses = async () => {
-    await fetch("http://127.0.0.1:5000/connectToGlasses", {
+    if(connectString === "Connecting..." || connectString === "Connected") {
+      setConnectString("Connect to AdHawk")
+      await fetch("http://127.0.0.1:5000/disconnect", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
+      setConnectString("Connecting...")
+      await fetch("http://127.0.0.1:5000/connectToGlasses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-    });
+      });
+      const response = await fetch("http://127.0.0.1:5000/connectToGlasses", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      //console.log(response)
+      setConnectString("Connected")
+    }
   };
 
   const controlTimer = async (action) => {
@@ -114,7 +133,7 @@ const Dashboard = () => {
           }}
           onClick={() => connectToGlasses()}
         >
-          Connect To AdHawk
+          {connectString}
         </Button>
         <CountdownBox
           style={{

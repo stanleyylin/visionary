@@ -76,6 +76,7 @@ class FrontendData:
 
     def _handle_tracker_connect(self):
         print("Tracker connected")
+        
         self._api.set_et_stream_rate(60, callback=lambda *args: None)
 
         self._api.set_et_stream_control([

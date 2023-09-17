@@ -55,6 +55,14 @@ def control():
 def connectToGlasses():
     global frontend
     frontend = FrontendData()
+    return jsonify({"status": "ok"})
+
+@app.route('/disconnect', methods=['POST'])
+def disconnect():
+    global frontend
+    frontend.shutdown()
+    return jsonify({"status": "ok"})
+
 
 @app.route('/time_left')
 def time_left():
