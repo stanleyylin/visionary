@@ -23,7 +23,8 @@ REST_BLOCK = 21  # 20 minutes in seconds
 end_time = None
 remaining_time_when_paused = None
 frontend = None
-glassesValues = None
+gazeValues = None
+pupilValue = None
 
 
 
@@ -66,20 +67,21 @@ def disconnect():
 
 @app.route('/time_left')
 def time_left():
-    global state, end_time, frontend, glassesValues
+    global state, end_time, frontend, gazeValues, pupilValue
     current_time = time.time()
 
     print(frontend)
     if(frontend != None):
-        print(frontend.getValues())
-        glassesValues = frontend.getValues()
+        print(frontend.getGazeValues())
+        gazeValues = frontend.getGazeValues()
+        pupilValue = frontend.getPupilValue()
 
     if state == NOT_STARTED:
         return jsonify({"time_left": 0, "state": state})
     
     # Handle the paused states
     if state in [WORK_PAUSED, REST_PAUSED]:
-        return jsonify({"time_left": remaining_time_when_paused, "state": state, "eyeValues": glassesValues})
+        return jsonify({"time_left": remaining_time_when_paused, "state": state, "gazeValues": gazeValues, "pupilValue": pupilValue})
     
     time_left = end_time - current_time
 
@@ -89,7 +91,7 @@ def time_left():
             state = REST_RUNNING if state == WORK_RUNNING else WORK_RUNNING
             end_time = current_time + (REST_BLOCK if state == REST_RUNNING else WORK_BLOCK)
 
-    return jsonify({"time_left": time_left, "state": state, "eyeValues": glassesValues})
+    return jsonify({"time_left": time_left, "state": state, "gazeValues": gazeValues, "pupilValue": pupilValue})
 
 @app.route('/reset', methods=['POST'])
 def reset():

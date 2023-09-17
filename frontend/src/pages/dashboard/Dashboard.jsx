@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
 const Dashboard = () => {
-  const [depthValue, setDepthValue] = useState(0);
+  const [distanceValue, setDistanceValue] = useState(0);
+  const [pupilValue, setPupilValue] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
   const [connectString, setConnectString] = useState('Connect to AdHawk')
-
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -23,22 +23,23 @@ const Dashboard = () => {
           const data = await response.json();
           setTimeLeft(Math.floor(data.time_left));
 
-          if (data.eyeValues && data.eyeValues.length > 2) {
-            setDepthValue(data.eyeValues[2]);
+          if (data.gazeValues && data.gazeValues.length > 2) {
+            setDistanceValue(data.gazeValues[2]);
           } else {
             console.warn(
               "eyeValues is either undefined or does not have enough elements."
             );
           }
+          setPupilValue(data.pupilValue)
 
           setState(data.state);
 
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
           }
-          if((data.eyeValues[2] > -2) && (data.state === 3)) {
+          if((data.gazeValues[2] > -3) && (data.state === 3)) {
             controlTimer("pause")
-          } else if((data.eyeValues[2] <= -2) && (data.state === 4)) {
+          } else if((data.gazeValues[2] <= -3) && (data.state === 4)) {
             controlTimer("resume")
           }
 
@@ -202,11 +203,12 @@ const Dashboard = () => {
           }}
         >
           <DataBox>
-            <h3>Depth</h3>
-            <p>{Number(depthValue).toFixed(5)}</p>
+            <h3>Distance</h3>
+            <p>{Number(distanceValue).toFixed(5)}</p>
           </DataBox>
           <DataBox>
-            <h3>Orientation</h3>
+            <h3>Average Pupil Width</h3>
+            <p>{Number(pupilValue).toFixed(5)}</p>
           </DataBox>
         </div>
       </Container>

@@ -8,12 +8,16 @@ import adhawkapi
 import adhawkapi.frontend
 
 gazeValues = []
+pupilValue = 0
 
 class FrontendData:
     ''' BLE Frontend '''
 
-    def getValues(self):
+    def getGazeValues(self):
         return gazeValues
+    
+    def getPupilValue(self):
+        return pupilValue
 
     def __init__(self):
         # Instantiate an API object
@@ -54,7 +58,10 @@ class FrontendData:
 
         if et_data.pupil_diameter is not None:
             if et_data.eye_mask == adhawkapi.EyeMask.BINOCULAR:
+                global pupilValue
                 rdiameter, ldiameter = et_data.pupil_diameter
+                pupilValue = sum(et_data.pupil_diameter)/2
+
                 #print(f'Pupil diameter: Left={ldiameter:.2f} Right={rdiameter:.2f}')
 
         if et_data.imu_quaternion is not None:
