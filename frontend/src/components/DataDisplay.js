@@ -1,29 +1,25 @@
 import React, { useState, useEffect } from "react";
+import db from "../firebase";
 
 function DataDisplay() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("useEffect is running...");
-    async function fetchData() {
-      console.log("fetchData is called...");
-
+    const fetchData = async () => {
       try {
-        // Check if data exists
-        if (data.length === 0) {
-          const response = await fetch("/api/get_accounts");
-          const fetchedData = await response.json();
-          setData(fetchedData);
-          console.log("fetched");
-        }
-        setLoading(false); // Data is fetched, set loading to false
+        const snapshot = await db.collection("accounts").get();
+        const fetchedData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setData(fetchedData);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }
-    fetchData();
-  }, [data]);
+    };
+  }, []);
 
   return (
     <div>
@@ -31,13 +27,15 @@ function DataDisplay() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
-          {data.map((item) => (
-            <li key={item.id}>
-              Account ID: {item.id}, Distance: {item.distance} m
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul>
+            {data.map((item) => (
+              <li key={item.id}>
+                Account ID: {item.id}, Distance: {item.distance} m
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );

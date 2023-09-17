@@ -3,7 +3,6 @@ from glasses import FrontendData
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import time
-import sqlite3
 
 app = Flask(__name__)
 
@@ -26,18 +25,6 @@ remaining_time_when_paused = None
 frontend = None
 gazeValues = None
 pupilValue = None
-
-def connect_to_database():
-    return sqlite3.connect("screen_time_tracker.db")
-
-@app.route('/api/get_accounts', methods=['GET'])
-def get_accounts():
-    conn = connect_to_database()
-    with conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, distance FROM accounts")
-        data = [{"id": row[0], "distance": row[1]} for row in cursor.fetchall()]
-    return jsonify(data)
 
 @app.route('/control', methods=['POST'])
 def control():

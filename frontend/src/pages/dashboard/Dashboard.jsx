@@ -2,16 +2,21 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
 import DataDisplay from "../../components/DataDisplay";
+import db from "../../firebase";
 
 const Dashboard = () => {
   const [distanceValue, setDistanceValue] = useState(0);
   const [pupilValue, setPupilValue] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
+  const [dataEntries, setDataEntries] = useState([]); // Store data entries
 
   const [connectString, setConnectString] = useState("Connect to AdHawk");
 
-  const sampleData = [6, 7, 9, 8, 6, 7, 6, 5, 6.5, 7, 8];
+  const sampleData = [
+    3.4, 2.3, 0.4, 0.44, 0.42, 0.5, 3.1, 2.4, 4, 4.6, 5, 0.54, 0.66, 0.3, 0.5,
+    2.1, 2.4, 1.9, 2.6, 0.5, 0.54, 0.66, 0.5, 0.44, 1.9, 2.6,
+  ];
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -120,6 +125,38 @@ const Dashboard = () => {
 
     resetTimer();
   }, []);
+
+  const addDataEntry = () => {
+    const timestamp = new Date().toLocaleTimeString();
+    const newDataEntry = {
+      timestamp,
+      distanceValue,
+      pupilValue,
+    };
+
+    // Add the data entry to Firestore
+    db.collection("accounts")
+      .add(newDataEntry)
+      .then((docRef) => {
+        console.log("Data entry written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+        console.error("Error adding data entry: ", error);
+      });
+
+    setDataEntries((prevEntries) => [...prevEntries, newDataEntry]);
+  };
+
+  useEffect(() => {
+    // Check if state is not equal to 0, and add data entries every 5 seconds
+    if (state !== 0) {
+      const intervalId = setInterval(addDataEntry, 5000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [state, distanceValue, pupilValue]);
 
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
