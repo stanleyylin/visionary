@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
 import DataDisplay from "../../components/DataDisplay";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, collection, setDoc, Timestamp } from "firebase/firestore";
 import db from "../../firebase";
 
 const Dashboard = () => {
@@ -136,7 +136,7 @@ const Dashboard = () => {
     };
 
     // Specify the Firestore document reference where you want to add the data
-    const dataDocRef = doc(db, "accounts", "r8lR54AHrJfdozDbqllp"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
+    const dataDocRef = collection(db, "accounts"); // Replace "your_document_id" with the actual document ID or leave it empty for Firestore to auto-generate one
 
     // Use setDoc to add or update the document
     setDoc(dataDocRef, newDataEntry)
