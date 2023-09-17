@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import LineChart from "../../components/LineChart";
 
 const Dashboard = () => {
   const [distanceValue, setDistanceValue] = useState(0);
@@ -7,7 +8,9 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [state, setState] = useState(0);
 
-  const [connectString, setConnectString] = useState('Connect to AdHawk')
+  const [connectString, setConnectString] = useState("Connect to AdHawk");
+
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     const fetchTimeLeft = async () => {
@@ -22,70 +25,110 @@ const Dashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setTimeLeft(Math.floor(data.time_left));
-
-          if (data.gazeValues && data.gazeValues.length > 2) {
-            setDistanceValue(data.gazeValues[2]);
-          } else {
-            console.warn(
-              "eyeValues is either undefined or does not have enough elements."
-            );
-          }
-          setPupilValue(data.pupilValue)
-
           setState(data.state);
 
-          if (data.time_left <= 0 && data.state === 3) {
-            alert("Time to take an eye break!");
-          }
-          if((data.gazeValues[2] > -3) && (data.state === 3)) {
-            controlTimer("pause")
-          } else if((data.gazeValues[2] <= -3) && (data.state === 4)) {
-            controlTimer("resume")
+          if (Array.isArray(data.gazeValues) && data.gazeValues.length > 2) {
+            setDistanceValue(data.gazeValues[2]);
+            if (data.gazeValues[2] > -3 && data.state === 3) {
+              controlTimer("pause");
+            } else if (data.gazeValues[2] <= -3 && data.state === 4) {
+              controlTimer("resume");
+            }
           }
 
-          console.log(state)
+          if (Array.isArray(data.eyeValues) && data.eyeValues.length > 2) {
+            setDistanceValue(data.eyeValues[2]);
+
+            if (data.time_left <= 0 && data.state === 3) {
+              alert("Time to take an eye break!");
+            }
+
+            if (data.eyeValues[2] > -2 && data.state === 3) {
+              controlTimer("pause");
+            } else if (data.eyeValues[2] <= -2 && data.state === 4) {
+              controlTimer("resume");
+            }
+          } else {
+            // console.warn(
+            //   "eyeValues is either undefined or does not have enough elements."
+            // );
+          }
+
+          if (data.pupilValue) {
+            setPupilValue(data.pupilValue);
+          }
+          // console.log(state);
         } else {
           console.log("Server returned an error");
         }
       } catch (error) {
-        console.log("Fetch error: ", error);
+        // console.log("Fetch error: ", error);
       }
     };
 
-    fetchTimeLeft();
+    const fetchChartData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/get_distances");
+        if (response.ok) {
+          const data = await response.json();
+          setChartData(data.data.map((item) => item.Distance));
+        } else {
+          console.error("Failed to fetch chart data");
+        }
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
 
+    // Initial fetch calls
+    fetchTimeLeft();
+    fetchChartData();
+
+    // Set up periodic fetching
     const intervalId = setInterval(fetchTimeLeft, 100);
 
+    // Cleanup interval
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, []); // Empty dependency array means this useEffect runs once when the component mounts.
+
+  while (state != 0) {
+    console.log("distanceeeeee");
+    console.log(Number(distanceValue));
+  }
 
   const connectToGlasses = async () => {
-    if(connectString === "Connecting..." || connectString === "Connected") {
-      setConnectString("Connect to AdHawk")
-      await fetch("http://127.0.0.1:5000/disconnect", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } else {
-      setConnectString("Connecting...")
-      await fetch("http://127.0.0.1:5000/connectToGlasses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      });
-      const response = await fetch("http://127.0.0.1:5000/connectToGlasses", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      //console.log(response)
-      setConnectString("Connected")
+    try {
+      if (connectString === "Connecting..." || connectString === "Connected") {
+        setConnectString("Connect to AdHawk");
+        const response = await fetch("http://127.0.0.1:5000/disconnect", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        // Add check for response.ok if needed
+      } else {
+        setConnectString("Connecting...");
+        const response = await fetch("http://127.0.0.1:5000/connectToGlasses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          // You may fetch again with GET method here if necessary
+          setConnectString("Disconnect");
+        } else {
+          setConnectString("Connect to AdHawk");
+          console.log("Failed to connect");
+        }
+      }
+    } catch (error) {
+      setConnectString("Connect to AdHawk");
+      console.log("Connection error: ", error);
     }
   };
 
@@ -125,17 +168,23 @@ const Dashboard = () => {
           state in [0, 1, 2] ? "white" : state === 3 ? "#ed809c" : "#353330",
       }}
     >
-      
       <Container style={{ color: state in [0, 1, 2] ? "black" : "white" }}>
-        <Button
-          style={{
-            backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
-            color: state in [0, 1, 2] ? "white" : "black",
-          }}
-          onClick={() => connectToGlasses()}
-        >
-          {connectString}
-        </Button>
+        <ConnectBox>
+          <h4>
+            {connectString === "Disconnect"
+              ? "Your glasses are connected"
+              : "Connect your glasses to start"}
+          </h4>
+          <Button
+            style={{
+              backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
+              color: state in [0, 1, 2] ? "white" : "black",
+            }}
+            onClick={() => connectToGlasses()}
+          >
+            {connectString}
+          </Button>
+        </ConnectBox>
         <CountdownBox
           style={{
             color:
@@ -146,12 +195,14 @@ const Dashboard = () => {
                 : state === 4
                 ? "lightgrey"
                 : "grey",
+            transition: "all 500ms",
           }}
         >
           <h1>
             {minutes}:{seconds}
           </h1>
           <div>
+            {state === 2 && <h2>PAUSED</h2>}
             {(state === 1 || state === 2) && <h3>left in your focus state.</h3>}
             {state === 3 && <h3>left in your eye break.</h3>}
             {state === 4 && (
@@ -167,6 +218,7 @@ const Dashboard = () => {
                   color: state in [0, 1, 2] ? "white" : "black",
                 }}
                 onClick={() => controlTimer("start")}
+                // disabled={connectString != "Disconnect"}
               >
                 Start
               </Button>
@@ -211,6 +263,17 @@ const Dashboard = () => {
             <p>{Number(pupilValue).toFixed(5)}</p>
           </DataBox>
         </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "20px",
+            width: "40vw",
+          }}
+        >
+          <DataBox>
+            <LineChart data={chartData} />
+          </DataBox>
+        </div>
       </Container>
     </PageContainer>
   );
@@ -241,6 +304,19 @@ const Container = styled.div`
   gap: 20px;
   justify-content: center;
   transition: all 500ms;
+`;
+
+const ConnectBox = styled.div`
+  width: calc(40vw - 40px);
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #f0e5e5;
+  background: #f0e5e510;
+  line-height: 16px;
 `;
 
 const CountdownBox = styled.div`
@@ -276,7 +352,6 @@ const Button = styled.button`
   padding-right: 22px;
   cursor: pointer;
   transition: all 500ms;
-  margin-top: 20px;
   :hover {
     opacity: 0.5;
   }
