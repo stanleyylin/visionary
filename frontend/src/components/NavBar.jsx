@@ -15,8 +15,8 @@ const NavBar = () => {
         <Link className="link" to={"/"}>
           <p>Home</p>
         </Link>
-        <Link className="link" to={"/settings"}>
-          <p>Settings</p>
+        <Link className="link" to={"/rolleyes"}>
+          <p>Eye Exercise</p>
         </Link>
         <button onClick={() => nav("/dashboard")}>My Dashboard</button>
       </RightSideContainer>

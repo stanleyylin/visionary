@@ -14,6 +14,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import db from "../../firebase";
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [distanceValue, setDistanceValue] = useState(0);
@@ -26,6 +27,8 @@ const Dashboard = () => {
 
   const [distanceData, setDistanceData] = useState([]); // Store sample data for distance values
   const [pupilData, setPupilData] = useState([]); // Store sample data for pupil values
+
+  const nav = useNavigate();
 
   useEffect(() => {
     // Function to fetch the most recent 24 entries from the "accounts" collection
@@ -198,7 +201,8 @@ const Dashboard = () => {
   useEffect(() => {
     // Check if state is not equal to 0, and add data entries every 5 seconds
     if (state !== 0) {
-      const intervalId = setInterval(addDataEntry, 5000);
+      addDataEntry();
+      const intervalId = setInterval(addDataEntry, 2500);
 
       return () => {
         clearInterval(intervalId);
@@ -333,6 +337,15 @@ const Dashboard = () => {
             <LineChart title={"Pupil Graph"} data={pupilData} />
           </DataBox>
         </div>
+        <Button
+          style={{
+            backgroundColor: state in [0, 1, 2] ? "#222222" : "white",
+            color: state in [0, 1, 2] ? "white" : "black",
+          }}
+          onClick={() => nav('/rolleyes')}
+        >
+          Exercise Eyes
+        </Button>
         <DataDisplay />
       </Container>
     </PageContainer>
