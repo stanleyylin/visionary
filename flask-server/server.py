@@ -3,13 +3,11 @@ from glasses import FrontendData
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import time
-import threading
-
-import sqlite3
 
 app = Flask(__name__)
 
 CORS(app, origins=["http://localhost:3000"])
+
 
 # States
 NOT_STARTED = 0
@@ -28,49 +26,7 @@ frontend = None
 gazeValues = None
 pupilValue = None
 
-def init_db():
-    conn = sqlite3.connect("eye_focus.db")
-    c = conn.cursor()
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS EyeDistanceData (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        User_ID INTEGER NOT NULL,
-        Distance REAL NOT NULL,
-        Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
-    conn.commit()
-    conn.close()
 
-@app.route("/initdb", methods=["GET"])
-def initdb():
-    init_db()
-    return "DB initialized"
-
-@app.route("/insert_distance", methods=["POST"])
-def insert_distance():
-    data = request.json
-    user_id = data.get("user_id")
-    distance = data.get("distance")
-
-    conn = sqlite3.connect("eye_focus.db")
-    c = conn.cursor()
-    c.execute("INSERT INTO EyeDistanceData (User_ID, Distance) VALUES (?, ?)", (user_id, distance))
-    conn.commit()
-    conn.close()
-
-    return jsonify({"status": "Distance data inserted"})
-
-
-@app.route("/get_distances", methods=["GET"])
-def get_distances():
-    conn = sqlite3.connect("eye_focus.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM EyeDistanceData")
-    data = c.fetchall()
-    conn.close()
-
-    return jsonify(data)
 
 @app.route('/control', methods=['POST'])
 def control():
@@ -96,30 +52,10 @@ def control():
 
     return jsonify({"status": "ok"})
 
-def record_data():
-    while True:
-        if frontend:
-            print(frontend.eyeValues[2])
-            distance = frontend.eyeValues[2]  # Assuming this method gives the distance you want to store
-            user_id = 1  # You might want to change this based on your requirements
-
-            conn = sqlite3.connect("eye_focus.db")
-            c = conn.cursor()
-            c.execute("INSERT INTO EyeDistanceData (User_ID, Distance) VALUES (?, ?)", (user_id, distance))
-            conn.commit()
-            conn.close()
-        time.sleep(5)
-
 @app.route('/connectToGlasses', methods=['POST'])
 def connectToGlasses():
     global frontend
     frontend = FrontendData()
-
-    # Start recording data in a separate thread
-    t = threading.Thread(target=record_data)
-    t.daemon = True  # This ensures the thread will be stopped when the application stops
-    t.start()
-
     return jsonify({"status": "ok"})
 
 @app.route('/disconnect', methods=['POST'])
@@ -127,6 +63,7 @@ def disconnect():
     global frontend
     frontend.shutdown()
     return jsonify({"status": "ok"})
+
 
 @app.route('/time_left')
 def time_left():
