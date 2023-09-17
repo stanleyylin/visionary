@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import LineChart from "../../components/LineChart";
+import DataDisplay from "../../components/DataDisplay";
 
 const Dashboard = () => {
   const [distanceValue, setDistanceValue] = useState(0);
@@ -30,20 +31,24 @@ const Dashboard = () => {
             setDistanceValue(data.gazeValues[2]);
           } else {
             console.warn(
-              "eyeValues is either undefined or does not have enough elements."
+              "gazeValues is either undefined or does not have enough elements."
             );
           }
-          setPupilValue(data.pupilValue);
 
+          setPupilValue(data.pupilValue);
           setState(data.state);
 
           if (data.time_left <= 0 && data.state === 3) {
             alert("Time to take an eye break!");
             controlTimer("pause");
           }
-          if (data.gazeValues[2] > -3 && data.state === 3) {
+          if (data.gazeValues && data.gazeValues[2] > -3 && data.state === 3) {
             controlTimer("pause");
-          } else if (data.gazeValues[2] <= -3 && data.state === 4) {
+          } else if (
+            data.gazeValues &&
+            data.gazeValues[2] <= -3 &&
+            data.state === 4
+          ) {
             controlTimer("resume");
           }
 
@@ -52,7 +57,7 @@ const Dashboard = () => {
           console.log("Server returned an error");
         }
       } catch (error) {
-        console.log("Fetch error: ", error);
+        console.error("Fetch error:", error);
       }
     };
 
@@ -232,6 +237,7 @@ const Dashboard = () => {
             <LineChart data={sampleData} />
           </DataBox>
         </div>
+        <DataDisplay />
       </Container>
     </PageContainer>
   );
