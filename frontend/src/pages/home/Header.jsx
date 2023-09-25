@@ -22,9 +22,10 @@ const Header = () => {
 
 const HeaderContainer = styled.div`
   width: 100vw;
-  height: 80vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
+  position: relative;
   justify-content: center;
   > video {
     position: absolute;
