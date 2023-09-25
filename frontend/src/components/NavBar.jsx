@@ -28,6 +28,7 @@ const NavBarContainer = styled.div`
   position: fixed;
   width: calc(100vw - 80px);
   display: flex;
+  z-index: 1000;
   justify-content: space-between;
   align-items: center;
   padding: 8px;
