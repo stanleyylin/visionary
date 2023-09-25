@@ -436,6 +436,7 @@ const DataBox = styled.div`
   border: 1px solid #f0e5e5;
   background: #f0e5e510;
   width: 100%;
+  overflow: scroll;
 `;
 
 export default Dashboard;

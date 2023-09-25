@@ -14,7 +14,6 @@ function App() {
 
       <Routes>
         <Route index element={<HomePage/>}/>
-        <Route path="/settings" element={<Settings/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/rolleyes" element={<Rolleyes/>}/>
       </Routes>

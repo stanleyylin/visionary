@@ -133,24 +133,21 @@ const Rolleyes = () => {
 
 
   return (
-    <div>
-      Settings
-      <br /><br /><br /><br />
-      <Button
-        style={{
-          backgroundColor: "#222222",
-          color: "white",
-          marginLeft: "30px",
-        }}
-        onClick={() => controlTimer("start")}
-      >
-        Start
-      </Button>
-      <h3 style={{marginLeft: "30px"}}>X: {distanceValue[0]}</h3>
-      <h3 style={{marginLeft: "30px"}}>Y: {distanceValue[1]}</h3>
-      <h1 style={{display: "flex", justifyContent: "center", alignItems: "center"}}>Score: {score}</h1>
+    <RollEyesContainer>
+      <Stats>
+        <Button onClick={() => controlTimer("start")}>
+          Start
+        </Button>
+        <h3>
+          X: {distanceValue[0]}
+        </h3>
+        <h3>
+          Y: {distanceValue[1]}
+        </h3>
+      </Stats>
+  
+      <Score>Score: {score}</Score>
 
-      {/* <h1>Z: {distanceValue[2]}</h1> */}
       <Canvas style={{height: "600px"}}>
         <ambientLight intensity={1} />
         <spotLight position={[2, 2, 2]} angle={0.8} penumbra={1}/>
@@ -158,21 +155,74 @@ const Rolleyes = () => {
         <Box position={[distanceValue[0], distanceValue[1]*1.5, 0]} />
         <TargetBox position={[randomX, randomY, 0]}/>
       </Canvas>
-    </div>
+    </RollEyesContainer>
     
   )
 }
 
+const RollEyesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px;
+`
+const Stats = styled.div`
+  display: flex;
+  align-self: center;
+  width: 500px;
+  justify-content: space-evenly;
+  align-items: center;
+
+`
+
+const Score = styled.h1`
+  font-family: Helvetica Now Display;
+  align-self: center;
+  font-size: 25px;
+  padding: 0;
+  margin-bottom: -50px;
+  margin-top: 16px;
+  font-weight: 600;
+  transition: background 0.5s;
+  background: linear-gradient(
+    90deg,
+    var(--c1, #f6d365),
+    var(--c2, #fda085) 51%,
+    var(--c1, #f6d365)
+  )
+  var(--x, 0) / 200%;
+  --c2: #fca27c;
+  --c1: #ff5ab4;
+  :hover {
+    --x: 100%;
+  }
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-text-fill-color: transparent;
+`
 const Button = styled.button`
   border: none;
   border-radius: 6px;
-  padding: 12px;
+  width: 120px;
+  height: 40px;
+  color: white;
+  margin-top: 2px;
   padding-left: 22px;
   padding-right: 22px;
   cursor: pointer;
   transition: all 500ms;
+  transition: background 0.5s;
+  background: linear-gradient(
+      90deg,
+      var(--c1, #f6d365),
+      var(--c2, #fda085) 51%,
+      var(--c1, #f6d365)
+    )
+    var(--x, 0) / 200%;
+  --c1: #fca27c;
+  --c2: #ff5ab4;
   :hover {
-    opacity: 0.5;
+    --x: 100%;
   }
 `;
 

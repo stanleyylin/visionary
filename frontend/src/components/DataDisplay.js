@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import db from "../firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore"; // Import the necessary Firebase Firestore functions
+import styled from "@emotion/styled";
 
 function DataDisplay() {
   const [data, setData] = useState([]);
@@ -37,17 +38,22 @@ function DataDisplay() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <>
+        <DataContainer>
           {data.map((item) => (
             <p key={item.id}>
               ID: {item.id}, Distance: {item.distanceValue} m , Pupil:
               {item.pupilValue} cm
             </p>
           ))}
-        </>
+        </ DataContainer>
       )}
     </div>
   );
 }
+
+const DataContainer = styled.div`
+  height: 500px;
+  overflow: scroll;
+`
 
 export default DataDisplay;
