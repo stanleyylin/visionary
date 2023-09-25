@@ -2,11 +2,15 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
+import video from '../../res/glasses.mp4';
 
 const Header = () => {
   const nav = useNavigate();
   return (
     <HeaderContainer>
+      <video autoPlay loop muted playsinline>
+          <source src={video} type='video/mp4' />
+      </video>
       <TextContainer>
         <h1>Meet Visionary, the <span>Apple</span> of your <span>Eye</span>.</h1>
         <p>Correct harmful eye habits before its too late with the Visionary glasses and built-in app.</p>
@@ -22,13 +26,27 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  > video {
+    position: absolute;
+    right: 55px;
+    width: 500px;
+    z-index: 0;
+  }
 
+  @media (max-width: 75em) {
+    > video {
+      display: none;
+    }
+  }
 `
 
 
 const TextContainer = styled.div`
   width: 48vw;
   margin-left: 15vw;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
   font-family: Helvetica Now Display;
   > h1 {
     line-height: 1.4;
@@ -50,6 +68,7 @@ const TextContainer = styled.div`
   }
   > button {
     border: none;
+    width: 220px;
     background-color: #222222;
     border-radius: 6px;
     color: white;
