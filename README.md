@@ -12,5 +12,6 @@ Poor eye health has become a prominent health issue. The solution? Meet Visionar
 ![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 
 ## Frontend Demo (Backend requires the Adhawk glasses and to be run locally)
+
 https://visionary-project.netlify.app
 
