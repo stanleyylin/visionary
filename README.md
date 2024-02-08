@@ -13,7 +13,7 @@ Poor eye health has become a prominent health issue. The solution? Meet Visionar
 
 ### Our Landing Sight (site)
 ![image](https://github.com/stanleyylin/visionary/assets/88297063/aff8d136-04b9-4247-bc81-962bf078792a)
-### The dashboard with Eye Tracking Hardware
+### The dashboard with Eye Tracking Glasses
 ![image](https://github.com/stanleyylin/visionary/assets/88297063/2baa9280-e0a6-46d7-bdea-43c7ff8bc77d)
 ### An eye exercise game that uses eye tracking!
 ![image](https://github.com/stanleyylin/visionary/assets/88297063/bccb6ed6-c7a2-480a-9c87-01f42700e740)
