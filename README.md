@@ -1,4 +1,4 @@
-s![visionary_header](https://github.com/stanleyylin/visionary/assets/88297063/7dcd4e95-ec4b-4ceb-8b17-01e5700e3957)
+![visionary_header](https://github.com/stanleyylin/visionary/assets/88297063/7dcd4e95-ec4b-4ceb-8b17-01e5700e3957)
 Do your eyes ever feel strained and dry after hours and hours spent staring at screens? Has your eye doctor ever told you about the 20-20-20 rule? Good thing we’ve automated it for you along with personalized analysis of your eye activity using AdHawk’s eye tracking device.
 
 ## What it does
